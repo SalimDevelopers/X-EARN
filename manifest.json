@@ -5,17 +5,13 @@
   "name": "X-EARN",
   "orientation": "portrait",
   "scope": "/",
-  "short_name": "x-earn",
-  "start_url": "/",
+  "short_name": "X-EARN",
+  "start_url": "https://salimdevelopers.github.io/X-EARN/](https://salimdevelopers.github.io/X-EARN/",
   "theme_color": "#ffffff",
   "lang": "hi",
-  "description": "X-EARN App",
-  "icons": [
-    {
-      "src": "https://via.placeholder.com/512",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
+  "display_override": [
+    "fullscreen",
+    "window-controls-overlay"
   ],
   "categories": [
     "business",
