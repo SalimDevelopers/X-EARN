@@ -1,0 +1,612 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>X EARN - Play & Win</title>
+<!-- FontAwesome Icons Link -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+body { margin:0; font-family:Arial,sans-serif; background:#090b16; color:#fff; padding-bottom: 70px; }
+* { box-sizing:border-box; } 
+html { scroll-behavior:smooth; }
+
+/* Header */
+header { position:sticky; top:0; background:#0b0f20cc; backdrop-filter:blur(10px); padding:12px 0; z-index:100; border-bottom: 1px solid #2d3763; }
+.c { max-width:1100px; margin:auto; padding:0 20px; }
+.nav-top { display:flex; justify-content:space-between; align-items:center; }
+.logo { display:flex; align-items:center; gap:10px; }
+.logo img { height:40px; }
+
+/* Buttons & Cards */
+.btn { background:linear-gradient(45deg,#ffd54a,#ff9800); padding:12px 18px; border-radius:12px; color:#000; font-weight:bold; text-decoration:none; cursor:pointer; border:none; display:inline-block; }
+.hero { padding:40px 20px; text-align:center; background:radial-gradient(circle,#1d2d6b,#090b16); border-radius: 20px; margin-top: 20px; }
+h1 { font-size:36px; margin: 10px 0; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:15px; margin-top: 15px; }
+.card { background:#131a31; border:1px solid #2d3763; padding:20px; border-radius:18px; transition:.3s; cursor:pointer; text-align:center; font-size:16px; font-weight:bold; user-select:none; }
+.card:hover { transform:translateY(-5px); box-shadow:0 0 15px #ffb30055; border-color:#ffd54a; }
+
+/* Forms & Inputs */
+input, textarea { width:100%; padding:12px; margin:8px 0; background:#0d1224; color:#fff; border:1px solid #333; border-radius:10px; }
+button[type="submit"] { padding:12px 18px; border:0; border-radius:10px; background:#ffd54a; font-weight:bold; cursor:pointer; width: 100%; }
+
+/* Wallet Badge */
+.wallet-box { background:#131a31; padding:8px 12px; border-radius:10px; border:1px solid #00ff88; font-weight:bold; font-size:14px; color:#00ff88; box-shadow:0 0 8px rgba(0,255,136,0.2); }
+.wallet-box b { color:#00ff88; }
+
+/* Contact Details Info Box */
+.contact-info { margin-bottom:20px; text-align:left; line-height:1.6; }
+.contact-info p { margin:6px 0; font-size:14px; color:#ccc; }
+.contact-info b { color:#ffd54a; }
+
+/* App Pages (Tabs) */
+.app-page { display: none; animation: fadeIn 0.3s ease-in-out; }
+.app-page.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Bottom Navigation */
+.bottom-nav { position:fixed; bottom:0; left:0; width:100%; background:#0b0f20f0; backdrop-filter:blur(10px); display:flex; justify-content:space-around; padding:12px 0; border-top:1px solid #2d3763; z-index:100; }
+.nav-item { background:none; border:none; color:#aaa; font-size:12px; display:flex; flex-direction:column; align-items:center; gap:5px; cursor:pointer; flex: 1; }
+.nav-item.active { color:#ffd54a; }
+.nav-icon { font-size: 20px; }
+
+/* MODAL POPUP */
+.modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center; }
+.modal-content { background:#131a31; border:2px solid #ffd54a; padding:25px; border-radius:20px; max-width:400px; width:90%; text-align:center; position:relative; }
+.close-btn { position:absolute; top:10px; right:15px; font-size:24px; cursor:pointer; color:#aaa; }
+
+/* SPIN WHEEL */
+.wheel-container { position:relative; width:260px; height:260px; margin:20px auto; }
+.wheel-pointer { position:absolute; top:-14px; left:50%; transform:translateX(-50%); width:0; height:0; border-left:14px solid transparent; border-right:14px solid transparent; border-top:24px solid #ff4757; z-index:20; filter:drop-shadow(0px 2px 4px #000); }
+.wheel { width:100%; height:100%; border-radius:50%; border:8px solid #ffd54a; box-shadow:0 0 20px #ff9800; position:relative; overflow:hidden; transition:transform 4s cubic-bezier(0.15, 0.85, 0.35, 1.05); background:conic-gradient(#1e2952 0deg 45deg, #2b3a75 45deg 90deg, #1e2952 90deg 135deg, #2b3a75 135deg 180deg, #1e2952 180deg 225deg, #2b3a75 225deg 270deg, #1e2952 270deg 315deg, #2b3a75 315deg 360deg); }
+.wheel-item { position: absolute; top: 50%; left: 50%; width: 70px; height: 30px; margin-top: -15px; margin-left: -35px; text-align: center; line-height: 30px; font-weight: bold; font-size: 15px; color: #ffd54a; text-shadow: 1px 1px 3px #000; pointer-events: none; }
+.wheel-center { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:46px; height:46px; background:#ffd54a; border:4px solid #fff; border-radius:50%; box-shadow:0 0 10px #000; z-index:15; }
+
+/* Ad Screen */
+.ad-screen { width:100%; height:160px; background:#000; border:2px solid #ffd54a; border-radius:15px; margin:15px 0; display:flex; flex-direction:column; justify-content:center; align-items:center; position:relative; overflow:hidden; }
+
+/* ================= 30 DAYS STREAK CSS ================= */
+.streak-container { margin-top: 30px; background: #131a31; border: 1px solid #2d3763; border-radius: 18px; padding: 20px; }
+.streak-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(55px, 1fr)); gap: 12px; margin-top: 15px; justify-items: center; }
+.streak-circle { width: 55px; height: 55px; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; font-weight: bold; transition: 0.3s; user-select: none; }
+.streak-circle.active-day { background: radial-gradient(circle, #ff9800, #ff4757); border: 2px solid #ffd54a; cursor: pointer; box-shadow: 0 0 15px #ff980077; color: #fff; animation: pulse 1.5s infinite; }
+.streak-circle.completed { background: #00ff8822; border: 2px solid #00ff88; color: #00ff88; }
+.streak-circle.locked { background: #0d1224; border: 2px dashed #2d3763; color: #555; }
+.streak-circle.locked-today { background: #0d1224; border: 2px solid #555; color: #aaa; }
+.s-day { font-size: 10px; opacity: 0.8; text-transform: uppercase; }
+.s-amt { font-size: 14px; margin-top: 2px; }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.08); } 100% { transform: scale(1); } }
+
+/* ================= SPLASH SCREEN CSS ================= */
+#splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #090b16; z-index: 99999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease-out; }
+#splashScreen img { width: 180px; animation: splashPulse 1s infinite alternate; }
+@keyframes splashPulse { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
+
+/* ================= CUSTOM PROFESSIONAL ALERT MODAL CSS ================= */
+.custom-alert-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 999999; justify-content: center; align-items: center; animation: fadeIn 0.2s ease-in-out; }
+.custom-alert-box { background: #131a31; border: 2px solid #ffd54a; padding: 30px 20px; border-radius: 20px; max-width: 340px; width: 90%; text-align: center; box-shadow: 0 0 25px rgba(255,213,74,0.3); }
+.custom-alert-icon { font-size: 45px; margin-bottom: 15px; }
+.custom-alert-title { font-size: 20px; font-weight: bold; margin-bottom: 10px; color: #ffd54a; }
+.custom-alert-msg { font-size: 14px; color: #ccc; margin-bottom: 20px; line-height: 1.5; }
+.custom-alert-btn { background: linear-gradient(45deg,#ffd54a,#ff9800); padding: 10px 25px; border-radius: 12px; color: #000; font-weight: bold; border: none; cursor: pointer; font-size: 15px; width: 100%; }
+</style>
+</head>
+<body>
+
+<!-- ================= SPLASH SCREEN HTML ================= -->
+<div id="splashScreen">
+  <img src="https://i.postimg.cc/MTx7W4dn/17257.png" alt="X EARN Logo">
+</div>
+
+<!-- ================= CUSTOM ALERT MODAL HTML ================= -->
+<div id="customAlert" class="custom-alert-overlay">
+  <div class="custom-alert-box">
+    <div id="alertIcon" class="custom-alert-icon"></div>
+    <div id="alertTitle" class="custom-alert-title">Congratulations!</div>
+    <div id="alertMsg" class="custom-alert-msg">Your message goes here</div>
+    <button class="custom-alert-btn" onclick="closeCustomAlert()">OKAY</button>
+  </div>
+</div>
+
+<!-- Header (Always Visible) -->
+<header>
+  <div class="c">
+    <div class="nav-top">
+      <div class="logo">
+        <img src="https://i.postimg.cc/yNnZ1XvW/file-0000000035248211bfa875e4f2045dfd.png" alt="X EARN">
+        <b>X EARN</b>
+      </div>
+      <div class="wallet-box"><i class="fa-solid fa-wallet"></i> &#8377; <b id="balance">0</b></div>
+    </div>
+  </div>
+</header>
+
+<div class="c">
+  <!-- ==================== HOME SECTION ==================== -->
+  <div id="home" class="app-page active">
+    <section class="hero">
+      <img src="https://i.postimg.cc/yNnZ1XvW/file-0000000035248211bfa875e4f2045dfd.png" height="100">
+      <h1>Play • Earn • Win</h1>
+      <p style="color:#aaa;">Play Simple Games & Earn Real Cash Daily!</p>
+      <button class="btn" onclick="switchTab('games')" style="margin-top:10px;">Start Earning</button>
+    </section>
+
+    <h3 style="margin-top: 30px;">Why X EARN?</h3>
+    <div class="grid">
+      <div class="card" style="font-size:14px; padding:15px;"> Fast Payouts</div>
+      <div class="card" style="font-size:14px; padding:15px;"> 100% Secure</div>
+      <div class="card" style="font-size:14px; padding:15px;"> Daily Bonuses</div>
+    </div>
+  </div>
+
+  <!-- ==================== GAMES SECTION ==================== -->
+  <div id="games" class="app-page">
+    <h2 style="margin-top: 20px;">Play & Earn</h2>
+    <div class="grid">
+      <div class="card" onclick="openGame('spin')">
+        <div style="font-size:30px; margin-bottom:10px;"><i class="fa-solid fa-dharmachakra"></i></div>
+        Lucky Spin
+      </div>
+      <div class="card" onclick="openGame('daily')">
+        <div style="font-size:30px; margin-bottom:10px;"><i class="fa-solid fa-gift"></i></div>
+        Daily Rewards
+      </div>
+      <div class="card" onclick="openGame('video')">
+        <div style="font-size:30px; margin-bottom:10px;"><i class="fa-solid fa-tv"></i></div>
+        Watch & Earn
+      </div>
+      <div class="card" onclick="openGame('withdraw')">
+        <div style="font-size:30px; margin-bottom:10px;"><i class="fa-solid fa-money-bill-transfer"></i></div>
+        Withdraw
+      </div>
+    </div>
+
+    <!-- ================= 30 DAYS STREAK HTML ================= -->
+    <div class="streak-container">
+      <h3 style="margin-top:0; color:#ffd54a;"><i class="fa-solid fa-fire"></i> 30 Days Streak Mission</h3>
+      <div class="streak-grid" id="streakGrid"></div>
+    </div>
+  </div>
+
+  <!-- ==================== SETTINGS SECTION ==================== -->
+  <div id="settings" class="app-page">
+    <h2 style="margin-top: 20px;">Settings & Support</h2>
+    
+    <div class="card" style="cursor:default; margin-bottom:20px;">
+      <h3 style="margin-top:0; color:#ffd54a; text-align:left;">App Info</h3>
+      <div class="contact-info">
+        <p><i class="fa-solid fa-mobile-screen"></i> <b>App Version:</b> 1.0.0 (Beta)</p>
+        <p><i class="fa-solid fa-user"></i> <b>Owner:</b> Md Salim Ansary</p>
+        <p><i class="fa-solid fa-envelope"></i> <b>Email:</b> <a href="mailto:salimans6201@gmail.com" style="color:#fff;">salimans6201@gmail.com</a></p>
+      </div>
+    </div>
+
+    <div class="card" style="cursor:default;">
+      <h3 style="margin-top:0; color:#ffd54a; text-align:left;">Contact Us</h3>
+      <form onsubmit="sendMail(event)">
+        <input id="cName" placeholder="Your Name" required>
+        <input id="cEmail" placeholder="Your Email" type="email" required>
+        <textarea id="cMsg" placeholder="Write your message..." rows="3" required></textarea>
+        <button type="submit" style="margin-top: 10px;">Send Message</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== BOTTOM NAVIGATION ==================== -->
+<nav class="bottom-nav">
+  <button class="nav-item active" onclick="switchTab('home')" id="tab-home">
+    <span class="nav-icon"><i class="fa-solid fa-house"></i></span>
+    Home
+  </button>
+  <button class="nav-item" onclick="switchTab('games')" id="tab-games">
+    <span class="nav-icon"><i class="fa-solid fa-gamepad"></i></span>
+    Games
+  </button>
+  <button class="nav-item" onclick="switchTab('settings')" id="tab-settings">
+    <span class="nav-icon"><i class="fa-solid fa-gear"></i></span>
+    Settings
+  </button>
+</nav>
+
+<!-- POPUP MODAL (Game Screens) -->
+<div id="gameModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal()">&times;</span>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+// ===== CUSTOM ALERT FUNCTION =====
+function showCustomAlert(title, message, icon = "") {
+  document.getElementById('alertTitle').textContent = title;
+  document.getElementById('alertMsg').textContent = message;
+  document.getElementById('alertIcon').innerHTML = icon;
+  document.getElementById('customAlert').style.display = 'flex';
+}
+
+function closeCustomAlert() {
+  document.getElementById('customAlert').style.display = 'none';
+}
+
+// ===== TAB NAVIGATION LOGIC =====
+function switchTab(tabId) {
+  document.querySelectorAll('.app-page').forEach(page => {
+    page.classList.remove('active');
+  });
+  document.querySelectorAll('.nav-item').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  document.getElementById(tabId).classList.add('active');
+  document.getElementById('tab-' + tabId).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ===== EXISTING APP LOGIC =====
+function sendMail(e) {
+  e.preventDefault();
+  const name = document.getElementById('cName').value;
+  const email = document.getElementById('cEmail').value;
+  const msg = document.getElementById('cMsg').value;
+  const mailtoUrl = `mailto:salimans6201@gmail.com?subject=X EARN Inquiry from ${encodeURIComponent(name)}&body=${encodeURIComponent("Name: " + name + "\nEmail: " + email + "\n\nMessage:\n" + msg)}`;
+  window.location.href = mailtoUrl;
+}
+
+let balance = parseInt(localStorage.getItem('xearn_balance')) || 0;
+document.getElementById('balance').textContent = balance;
+
+const todayStr = new Date().toDateString();
+
+const lastSpinDate = localStorage.getItem('xearn_spin_date');
+if (lastSpinDate !== todayStr) {
+  localStorage.setItem('xearn_spin_date', todayStr);
+  localStorage.setItem('xearn_spins_left', 5);
+}
+let spinsLeft = parseInt(localStorage.getItem('xearn_spins_left'));
+if (isNaN(spinsLeft)) spinsLeft = 5;
+
+const lastAdDate = localStorage.getItem('xearn_ad_date');
+if (lastAdDate !== todayStr) {
+  localStorage.setItem('xearn_ad_date', todayStr);
+  localStorage.setItem('xearn_ads_left', 10);
+}
+let adsLeft = parseInt(localStorage.getItem('xearn_ads_left'));
+if (isNaN(adsLeft)) adsLeft = 10;
+
+function updateBalance(amount) {
+  balance += amount;
+  localStorage.setItem('xearn_balance', balance);
+  document.getElementById('balance').textContent = balance;
+}
+
+function updateSpins(count) {
+  spinsLeft = count;
+  localStorage.setItem('xearn_spins_left', spinsLeft);
+}
+
+function updateAds(count) {
+  adsLeft = count;
+  localStorage.setItem('xearn_ads_left', adsLeft);
+}
+
+function closeModal() {
+  document.getElementById('gameModal').style.display = 'none';
+}
+
+const segments = [
+  { text: '&#8377;10', win: 10 },
+  { text: 'BLANK', win: 0 },
+  { text: '&#8377;20', win: 20 },
+  { text: '&#8377;5', win: 5 },
+  { text: 'BLANK', win: 0 },
+  { text: '&#8377;50', win: 50 },
+  { text: '&#8377;15', win: 15 },
+  { text: 'BLANK', win: 0 }
+];
+
+let currentRotation = 0;
+let isSpinning = false;
+
+function openGame(type) {
+  const modal = document.getElementById('gameModal');
+  const modalBody = document.getElementById('modalBody');
+  modal.style.display = 'flex';
+  
+  if (type === 'spin') {
+    renderSpinModal(modalBody);
+  } 
+  else if (type === 'daily') {
+    const lastClaimed = localStorage.getItem('xearn_daily_claimed_date');
+    if (lastClaimed === todayStr) {
+      modalBody.innerHTML = `
+        <h3><i class="fa-solid fa-gift"></i> Daily Reward</h3>
+        <p style="color:#ff4757; font-weight:bold; margin: 15px 0;">Aapne aaj ka reward claim kar liya hai!</p>
+        <p style="font-size:13px; color:#aaa;">Agla reward raat 12:00 baje ke baad milega.</p>
+        <button class="btn" style="background:#555; cursor:not-allowed;" disabled>Claimed Today</button>
+      `;
+    } else {
+      modalBody.innerHTML = `
+        <h3><i class="fa-solid fa-gift"></i> Daily Reward</h3>
+        <p>Claim your daily bonus of &#8377;10!</p><br>
+        <button class="btn" onclick="claimDaily()">Claim &#8377;10</button>
+      `;
+    }
+  } 
+  else if (type === 'video') {
+    renderVideoModal(modalBody);
+  } 
+  else if (type === 'withdraw') {
+    modalBody.innerHTML = `
+      <h3><i class="fa-solid fa-money-bill-transfer"></i> Instant Withdrawal</h3>
+      <p>Enter UPI ID to withdraw:</p>
+      <input type="text" id="upi" placeholder="example@upi">
+      <input type="number" id="wAmount" placeholder="Amount (Min &#8377;100)">
+      <p style="font-size:12px; color:#ffd54a; margin-top: 2px;">* Minimum Withdrawal Limit is &#8377;100</p>
+      <button class="btn" style="margin-top:10px;" onclick="processWithdraw()">Withdraw Cash</button>
+    `;
+  }
+}
+
+function renderVideoModal(modalBody) {
+  if (adsLeft > 0) {
+    modalBody.innerHTML = `
+      <h3><i class="fa-solid fa-tv"></i> Watch Video Ad</h3>
+      <p>Watch full ad to get <b>&#8377;1 Real Cash</b>!</p>
+      <p style="font-size:13px; color:#ffd54a;">Ads Available Today: <b>${adsLeft}</b>/10</p>
+      <div class="ad-screen" id="adScreen">
+        <div style="font-size:40px;"><i class="fa-solid fa-circle-play"></i></div>
+        <p style="margin:5px 0; color:#aaa; font-size:13px;">Click below to watch</p>
+      </div>
+      <button class="btn" id="watchBtn" onclick="startWatchingAd()">Watch Ad (+&#8377;1)</button>
+    `;
+  } else {
+    modalBody.innerHTML = `
+      <h3><i class="fa-solid fa-tv"></i> Watch Video Ad</h3>
+      <p style="color:#ff4757; font-weight:bold; margin-top:15px;">Aapne aaj ke 10 Video Ads dekh liye hain!</p>
+      <p style="font-size:13px; color:#aaa;">Naye Ads kal milenge.</p>
+      <button class="btn" style="background:#555; cursor:not-allowed; margin-top:10px;" disabled>Limit Reached</button>
+    `;
+  }
+}
+
+function startWatchingAd() {
+  const watchBtn = document.getElementById('watchBtn');
+  const adScreen = document.getElementById('adScreen');
+  watchBtn.disabled = true; watchBtn.style.background = "#555";
+  
+  let timeLeft = 5;
+  adScreen.innerHTML = `<p style="color:#ffd54a; font-weight:bold;">Playing Video Ad...</p><p style="font-size:24px; font-weight:bold;" id="adTimer">${timeLeft}s</p>`;
+  
+  const timer = setInterval(() => {
+    timeLeft--;
+    const timerElem = document.getElementById('adTimer');
+    if (timerElem) timerElem.textContent = timeLeft + "s";
+    
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      updateBalance(1);
+      updateAds(adsLeft - 1);
+      showCustomAlert("Congratulations! ", "1 added to your wallet successfully for watching the ad!", "");
+      renderVideoModal(document.getElementById('modalBody'));
+    }
+  }, 1000);
+}
+
+function renderSpinModal(modalBody) {
+  if (spinsLeft > 0) {
+    modalBody.innerHTML = `
+      <h3><i class="fa-solid fa-dharmachakra"></i> Lucky Spin</h3>
+      <p style="margin:5px 0;">Spins Left: <b id="spinCount" style="color:#ffd54a;font-size:18px;">${spinsLeft}</b>/5</p>
+      <div class="wheel-container">
+        <div class="wheel-pointer"></div>
+        <div id="wheel" class="wheel">
+          <div class="wheel-center"></div>
+          <div class="wheel-item" style="transform: rotate(22.5deg) translateY(-92px);">&#8377;10</div>
+          <div class="wheel-item" style="transform: rotate(67.5deg) translateY(-92px); color:#aaa; font-size:12px;">BLANK</div>
+          <div class="wheel-item" style="transform: rotate(112.5deg) translateY(-92px);">&#8377;20</div>
+          <div class="wheel-item" style="transform: rotate(157.5deg) translateY(-92px);">&#8377;5</div>
+          <div class="wheel-item" style="transform: rotate(202.5deg) translateY(-92px); color:#aaa; font-size:12px;">BLANK</div>
+          <div class="wheel-item" style="transform: rotate(247.5deg) translateY(-92px); color:#ff4757;">&#8377;50</div>
+          <div class="wheel-item" style="transform: rotate(292.5deg) translateY(-92px);">&#8377;15</div>
+          <div class="wheel-item" style="transform: rotate(337.5deg) translateY(-92px); color:#aaa; font-size:12px;">BLANK</div>
+        </div>
+      </div>
+      <button class="btn" id="spinBtn" onclick="spinWheel()">SPIN NOW</button>
+    `;
+  } else {
+    modalBody.innerHTML = `
+      <h3><i class="fa-solid fa-dharmachakra"></i> Lucky Spin</h3>
+      <p style="color:#ff4757; font-weight:bold;">Aaj ke free spins khatam!</p>
+      <hr style="border-top:1px solid #2d3763; margin:15px 0;">
+      <p style="font-size:14px; color:#ffd54a;">Buy Extra Spin:</p>
+      <button class="btn" onclick="buyExtraSpin()">Recharge &#8377;10 for 1 Spin</button>
+    `;
+  }
+}
+
+function spinWheel() {
+  if (isSpinning) return;
+  if (spinsLeft <= 0) { renderSpinModal(document.getElementById('modalBody')); return; }
+  
+  isSpinning = true;
+  const spinBtn = document.getElementById('spinBtn');
+  spinBtn.disabled = true;
+  
+  const targetIndex = Math.floor(Math.random() * segments.length);
+  const targetSegment = segments[targetIndex];
+  
+  const segmentAngle = 360 / 8;
+  const targetAngle = 360 - (targetIndex * segmentAngle + segmentAngle / 2);
+  const extraRotations = 5 * 360;
+  
+  currentRotation += extraRotations + (targetAngle - (currentRotation % 360));
+  
+  const wheel = document.getElementById('wheel');
+  wheel.style.transform = `rotate(${currentRotation}deg)`;
+  
+  updateSpins(spinsLeft - 1);
+  document.getElementById('spinCount').textContent = spinsLeft;
+  
+  setTimeout(() => {
+    isSpinning = false;
+    if (targetSegment.win > 0) {
+      updateBalance(targetSegment.win);
+      showCustomAlert("Congratulations! ", `Fantastic! You won ${targetSegment.win} from the spin wheel.`, "");
+    } else {
+      showCustomAlert("Oops! Bad Luck ", "It was BLANK. Don't worry, try your luck again on the next spin!", "");
+    }
+    
+    if (spinsLeft > 0) {
+      spinBtn.disabled = false;
+    } else {
+      renderSpinModal(document.getElementById('modalBody'));
+    }
+  }, 4000);
+}
+
+function buyExtraSpin() {
+  if (balance >= 10) {
+    updateBalance(-10);
+    updateSpins(1);
+    showCustomAlert("Success! ", "10 debited successfully! 1 Extra Spin added to your account.", "");
+    renderSpinModal(document.getElementById('modalBody'));
+  } else {
+    showCustomAlert("Insufficient Balance ", "You need a minimum of 10 in your wallet to buy an extra spin.", "");
+  }
+}
+
+function claimDaily() {
+  localStorage.setItem('xearn_daily_claimed_date', todayStr);
+  updateBalance(10);
+  showCustomAlert("Reward Claimed! ", "Awesome! 10 has been successfully added to your wallet.", "");
+  closeModal();
+}
+
+function processWithdraw() {
+  const upi = document.getElementById('upi').value;
+  const amount = parseInt(document.getElementById('wAmount').value);
+  if (!upi) { 
+    showCustomAlert("Invalid UPI ID ", "Please enter a valid UPI ID to process your withdrawal.", ""); 
+    return; 
+  }
+  if (!amount || amount < 100) { 
+    showCustomAlert("Limit Exceeded ", "Minimum withdrawal amount is 100.", ""); 
+    return; 
+  }
+  if (amount > balance) { 
+    showCustomAlert("Insufficient Balance ", "You do not have enough balance in your wallet for this withdrawal.", ""); 
+    return; 
+  }
+  
+  updateBalance(-amount);
+  showCustomAlert("Withdrawal Success! ", `Your withdrawal request of ${amount} has been successfully sent to ${upi}!`, "");
+  closeModal();
+}
+
+// ================= 30 DAYS STREAK LOGIC JS ================= //
+let streakDay = parseInt(localStorage.getItem('xearn_streak_day')) || 1;
+let streakDate = localStorage.getItem('xearn_streak_date') || "";
+let streakRewards = JSON.parse(localStorage.getItem('xearn_streak_rewards'));
+
+if (!streakRewards || streakRewards.length !== 30 || streakDay > 30) {
+  if(streakDay > 30) {
+     streakDay = 1;
+     streakDate = "";
+     localStorage.setItem('xearn_streak_day', streakDay);
+     localStorage.setItem('xearn_streak_date', streakDate);
+  }
+  streakRewards = [];
+  for(let i = 0; i < 30; i++) {
+    streakRewards.push(Math.floor(Math.random() * 20) + 1);
+  }
+  localStorage.setItem('xearn_streak_rewards', JSON.stringify(streakRewards));
+}
+
+function renderStreak() {
+  let html = '';
+  for (let i = 1; i <= 30; i++) {
+    let statusClass = 'locked';
+    let onclick = '';
+    let icon = `Day ${i}`;
+    let amt = streakRewards[i-1];
+
+    if (i < streakDay) {
+      statusClass = 'completed';
+      icon = '<i class="fa-solid fa-check"></i>';
+    } else if (i === streakDay) {
+      if (streakDate === todayStr) {
+        statusClass = 'locked-today';
+        icon = `Wait`;
+      } else {
+        statusClass = 'active-day';
+        onclick = `onclick="openStreakAd(${amt})"`;
+      }
+    }
+    
+    html += `<div class="streak-circle ${statusClass}" ${onclick}>
+              <div class="s-day">${icon}</div>
+              <div class="s-amt">&#8377;${amt}</div>
+            </div>`;
+  }
+  document.getElementById('streakGrid').innerHTML = html;
+}
+
+function openStreakAd(amount) {
+  const modal = document.getElementById('gameModal');
+  const modalBody = document.getElementById('modalBody');
+  modal.style.display = 'flex';
+
+  modalBody.innerHTML = `
+    <h3><i class="fa-solid fa-fire"></i> Day ${streakDay} Reward</h3>
+    <p>Watch full 30s ad to unlock <b>&#8377;${amount}</b></p>
+    <div class="ad-screen" id="streakAdScreen">
+      <div style="font-size:40px;"><i class="fa-solid fa-circle-play"></i></div>
+      <p style="margin:5px 0; color:#aaa; font-size:13px;">Tap below to start</p>
+    </div>
+    <button class="btn" id="streakWatchBtn" onclick="playStreakAd(${amount})">Watch Ad (+&#8377;${amount})</button>
+  `;
+}
+
+function playStreakAd(amount) {
+  document.getElementById('streakWatchBtn').style.display = 'none';
+  let timeLeft = 30;
+  const adScreen = document.getElementById('streakAdScreen');
+  adScreen.innerHTML = `<p style="color:#ffd54a; font-weight:bold;">Playing Advertisement...</p><h2 id="streakTimer">${timeLeft}s</h2>`;
+
+  const timer = setInterval(() => {
+    timeLeft--;
+    const st = document.getElementById('streakTimer');
+    if(st) st.textContent = timeLeft + 's';
+    
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      updateBalance(amount);
+      streakDate = todayStr;
+      localStorage.setItem('xearn_streak_date', streakDate);
+      streakDay++;
+      localStorage.setItem('xearn_streak_day', streakDay);
+      
+      closeModal();
+      showCustomAlert("Streak Claimed! ", `Amazing! Day reward of ${amount} has been added to your wallet.`, "");
+      renderStreak();
+    }
+  }, 1000);
+}
+
+renderStreak();
+
+// ================= SPLASH SCREEN JS ================= //
+setTimeout(() => {
+  const splash = document.getElementById('splashScreen');
+  if (splash) {
+    splash.style.opacity = '0';
+    setTimeout(() => { 
+      splash.style.display = 'none'; 
+    }, 500);
+  }
+}, 2500);
+</script>
+
+</body>
+</html>
