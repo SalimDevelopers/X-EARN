@@ -1,0 +1,16 @@
+{
+  "background_color": "#ffffff",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "X-EARN",
+  "orientation": "portrait",
+  "scope": "​/X-EARN/",
+  "short_name": "x-earn",
+  "start_url": "/X-EARN/",
+  "theme_color": "#ffffff",
+  "lang": "hi",
+  "categories": [
+    "business",
+    "finance"
+  ]
+}
