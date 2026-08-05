@@ -4,11 +4,19 @@
   "display": "standalone",
   "name": "X-EARN",
   "orientation": "portrait",
-  "scope": "​/X-EARN/",
+  "scope": "/",
   "short_name": "x-earn",
-  "start_url": "/X-EARN/",
+  "start_url": "/",
   "theme_color": "#ffffff",
   "lang": "hi",
+  "description": "X-EARN App",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/512",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
   "categories": [
     "business",
     "finance"
